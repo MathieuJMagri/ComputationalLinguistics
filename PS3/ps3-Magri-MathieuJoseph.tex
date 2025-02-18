@@ -1,0 +1,504 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array, parskip}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{url}
+% use straight quotes in texttt environment, make 0 different from O
+\usepackage[zerostyle=b,straightquotes,scaled=.93]{newtxtt}
+
+\usepackage{listings}
+\lstset{
+ basicstyle=\ttfamily,
+ columns=fullflexible,
+ upquote,
+ keepspaces,
+ literate={*}{{\char42}}1
+ {-}{{\char45}}1
+}
+\usepackage[short labels]{enumitem}
+
+\usepackage{soul}  % for strike through (\st{})
+\usepackage[dvipsnames,usenames,table]{xcolor} % for colors
+\usepackage[htt]{hyphenat} % to break lines in texttt
+
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{mdframed}
+\global\mdfdefinestyle{simple}{linewidth=1pt,skipabove=.5em}
+\newenvironment{AnswerBox}{\begin{mdframed}[style=simple]}{\end{mdframed}}
+\newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}}}
+\usepackage[colorlinks]{hyperref} % \href{http://link.com}{link text}
+\hypersetup{linkcolor=NavyBlue,citecolor=NavyBlue,filecolor=NavyBlue,urlcolor=NavyBlue}
+\usepackage{dsfont}
+\newcommand{\required}[1]{{\color{blue}{#1}}}
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand{\PSnum}{3}
+
+\author{
+  \textbf{Name}: Mathieu-Joseph Magri      %Put your name here.
+, \textbf{McGill ID}: 260928498  %Put your McGill ID here.
+}
+
+\begin{document}
+
+\title{LING/COMP 445, LING 645\\Problem Set \PSnum}
+\date{Due before 8:35 AM on Thursday, February 16, 2023}
+\maketitle
+Please enter your name and McGill ID above.
+There are several types of questions below.
+\begin{itemize}
+\item
+For questions involving answers in English or mathematics or a
+combination of the two, put your answers to the question in an
+answer box like in the example below. You can find more
+information about \LaTeX{} here \url{https://www.latex-project.org/}.
+
+\item For programming questions,
+please put your answers into a file called
+\texttt{ps\PSnum-lastname-firstname.clj}. Be careful to follow the instructions
+exactly and be sure that all of your function definitions use the
+precise names, number of inputs and input types, and output types as
+requested in each question.
+
+For the code portion of the assignment, \textbf{it is crucial to submit a
+standalone file that runs}. Before you submit \texttt{ps\PSnum-lastname-firstname.clj},
+make sure that your code executes correctly without any errors
+when run at the command line by typing
+\texttt{clojure ps\PSnum-lastname-firtname.clj} at a terminal
+prompt. We cannot grade any code that does not run correctly as a
+standalone file, and if the preceding command produces an error,
+the code portion of the assignment will receive a $0$.
+
+To do the computational problems, we recommend that you install
+Clojure on your local machine and write and debug the answers to each
+problem in a local copy of \texttt{ps\PSnum-lastname-firstname.clj}. You can
+find information about installing and using Clojure here
+\url{https://clojure.org/}.
+
+A template Clojure file will be provided with the helper
+functions described below.
+\end{itemize}
+Once you have entered your answers, please compile your copy of this
+\LaTeX{} into a PDF and submit
+\begin{enumerate}[(i),noitemsep]
+\item
+the compiled PDF renamed to
+\texttt{ps\PSnum-lastname-firstname.pdf}
+\item
+the raw \LaTeX{} file renamed to
+\texttt{ps\PSnum-lastname-firstname.tex} and
+\item
+your \texttt{ps\PSnum-lastname-firstname.clj}
+\end{enumerate}
+to the Problem Set \PSnum{} folder under `Assignments' on MyCourses.
+
+\hrulefill %--------------------------------
+
+\paragraph{Example Problem:}
+This is an example question using some fake math like this
+$L=\sum_0^{\infty} \mathcal{G} \delta_x$.
+
+\paragraph{Example Answer:} Put your answer in the box provided, like this:
+\begin{AnswerBox}
+Example answer is $L=\sum_0^{\infty} \mathcal{G} \delta_x$.
+\end{AnswerBox}
+
+
+\hrulefill%--------------------------------
+
+\pagebreak%
+
+\paragraph{Problem 1:}
+
+In these exercises, we are going to be processing some natural linguistic data,
+the first paragraph of Moby Dick. We will first write some procedures that help
+us to manipulate this corpus. We will then start analyzing this data using some
+probabilistic models.
+
+We'll start by defining the variable \texttt{moby-word-tokens}, the tokens in
+our corpus as a Clojure list. This variable is defined for you already in
+the provided template Clojure file.
+
+\begin{lstlisting}
+  (def moby-word-tokens '(CALL me Ishmael . Some years ago never mind how long
+    precisely having little or no money in my purse , and nothing particular to
+    interest me on shore , I thought I would sail about a little and see the
+    watery part of the world . It is a way I have of driving off the spleen ,
+    and regulating the circulation . Whenever I find myself growing grim about
+    the mouth whenever it is a damp , drizzly November in my soul whenever I
+    find myself involuntarily pausing before coffin warehouses , and bringing up
+    the rear of every funeral I meet and especially whenever my hypos get such
+    an upper hand of me , that it requires a strong moral principle to prevent
+    me from deliberately stepping into the street , and methodically knocking
+    people's hats off then , I account it high time to get to sea as soon as I
+    can . This is my substitute for pistol and ball . With a philosophical
+    flourish Cato throws himself upon his sword I quietly take to the ship .
+    There is nothing surprising in this . If they but knew it , almost all men
+    in their degree , some time or other , cherish very nearly the same feelings
+    toward the ocean with me .))
+\end{lstlisting}
+
+In the template Clojure file, we have also defined the function
+\texttt{member-of-list?}, with the following code.
+\begin{lstlisting}
+  (defn member-of-list? [w l]
+    (if (empty? l)
+      false
+      (if (= w (first l))
+        true
+        (member-of-list? w (rest l)))))
+\end{lstlisting}
+It has two arguments, \texttt{w} and \texttt{l}, and returns \texttt{true} if
+\texttt{w} is a member of the list \texttt{l}, and \texttt{false} otherwise. For
+example, \texttt{(member-of-list? 'a '(a ship is))}, will return
+\texttt{true}, and \texttt{(member-of-list? 'the '(a ship is))} will return
+\texttt{false}.
+
+The template Clojure file contains a skeleton for the function
+\required{\texttt{get-vocabulary}}, which you must implement. This function
+takes two arguments, \texttt{word-tokens} and \texttt{vocab}, and it should
+return a list of all unique words occurring in \texttt{word-tokens}. For
+example, if \texttt{word-tokens} is \texttt{'(the ship is the ship)}, then
+get-vocabulary should return \texttt{'(the ship is)}. Implement this function by
+filling in the missing parts of this provided code.
+
+When you call \texttt{(get-vocabulary moby-word-tokens '())}, you will get back
+a list of all of the unique words occurring in \texttt{moby-word-tokens}. Give
+this the name \required{\texttt{moby-vocab}}.
+
+% \begin{lstlisting}
+% ;;(defn get-vocabulary [word-tokens vocab]
+% ;;  (if (empty? word-tokens)
+% ;;    vocab
+% ;;    (if (member-of-list? ;;finish this line
+% ;;      (get-vocabulary  ;;finish this line
+% ;;      (get-vocabulary  ;;finish this line
+% \end{lstlisting}
+
+\textbf{Note}: there are a lot of choices that go into processing text when
+doing work with a corpus. That is not the point of this problem set.  To make
+things easier:
+\begin{itemize}[nosep]
+  \item Don't worry about case.   So, treat \texttt{With} and \texttt{with} as
+    different words.
+  \item Don't worry about punctuation.  Treat \texttt{.} as a word just like any
+    other. Also, note that commas are treated as whitespace in Clojure so they
+    will be ignored by your code. We left them in the list
+    \texttt{moby-word-tokens} just for readability.
+\end{itemize}
+
+
+\paragraph{Answer 1:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 2:}
+
+Define a function \required{\texttt{get-count-of-word}}. This function should
+take three arguments, \texttt{w}, \texttt{word-tokens}, and \texttt{count},
+where \texttt{w} is a word, \texttt{word-tokens} is a list of words, and
+\texttt{count} is a number.
+
+% \begin{lstlisting}
+% ;;(defn get-count-of-word [w word-tokens count]
+%   ;;fill this in
+% \end{lstlisting}
+
+When you call \texttt{(get-count-of-word w word-tokens 0)},  the function should
+return the number of occurrences of the word \texttt{w} in the list
+\texttt{word-tokens}. For example
+\begin{itemize}[noitemsep]
+  \item \texttt{(get-count-of-word 'the (list 'the 'the 'whale) 0)} should
+    return \texttt{2}.
+  \item \texttt{(get-count-of-word 'the (list 'the 'whale) 0)} should return
+    \texttt{1}.
+\end{itemize}
+Write \texttt{get-count-of-word} as a recursive function.   You can use the
+\texttt{count} argument to accumulate the words counted so far.
+
+\paragraph{Answer 2:} Please put the answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 3:}
+
+In the template Clojure file, we have provided a function
+\texttt{get-word-counts}, which takes two arguments, \texttt{vocab} and
+\texttt{word-tokens}, where \texttt{vocab} is assumed to be a list of the unique
+words that occur in the list \texttt{word-tokens}.
+\begin{lstlisting}
+  (defn get-word-counts [vocab word-tokens]
+    (let [count-word
+          (fn [w] (get-count-of-word w word-tokens 0))]
+      (map count-word vocab)))
+\end{lstlisting}
+
+This function returns the number of times each word in \texttt{vocab} occurs in
+\texttt{word-tokens}. For example, suppose \texttt{vocab} is  \texttt{'(whale
+the is)}, and \texttt{word-tokens} is  \texttt{'(the is whale is)}.  Then the
+function will return the list \texttt{(1 1 2)}, corresponding to the number of
+times \texttt{'whale}, \texttt{'the}, and \texttt{'is} occur in
+\texttt{word-tokens}, respectively.
+
+Use this function and the other variables we have
+defined, to define a variable named \required{\texttt{moby-word-frequencies}}.
+This variable should contain the number of times each word in
+\texttt{moby-vocab} occurs in \texttt{moby-word-tokens}.
+
+\paragraph{Answer 3:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\hrulefill %--------------------------------
+
+
+\paragraph{Problem 4:}
+
+In class we defined the functions \texttt{normalize}, \texttt{flip}, and
+\texttt{sample-categorical}. These functions will be very useful for us, and are
+included below as well as in the Clojure template file.
+
+\begin{lstlisting}
+  (defn flip [p]
+    (if (< (rand 1) p)
+      true
+      false))
+
+  (defn normalize [params]
+    (let [sum (apply + params)]
+      (map (fn [x] (/ x sum)) params)))
+
+  (defn sample-categorical [outcomes params]
+    (if (flip (first params))
+      (first outcomes)
+      (sample-categorical (rest outcomes) (normalize (rest params)))))
+\end{lstlisting}
+
+We have also provided a function that returns a particular probability
+distribution, the \emph{uniform distribution}. The uniform distribution is the
+distribution which assigns equal probability to every possible outcome. The
+function \texttt{create-uniform-distribution} takes a single argument,
+\texttt{outcomes}, which is a list of length $n$. The function returns a list
+containing the number $1/n$ repeated $n$ times. For example, if
+\texttt{outcomes} is \texttt{'(the a every)}, then this function will return
+\texttt{'(1/3 1/3 1/3)}. This list can be interpreted as a probability
+distribution over the outcomes, which assigns equal probability to each of them.
+
+\begin{lstlisting}
+(defn create-uniform-distribution [outcomes]
+  (let [num-outcomes (count outcomes)]
+    (map
+      (fn [x] (/ 1 num-outcomes))
+      outcomes)))
+\end{lstlisting}
+
+Using functions \texttt{create-uniform-distribution} and
+\texttt{sample-categorical}, write a function
+\required{\texttt{sample-uniform-BOW-sentence}} that takes two arguments: a
+number \texttt{n} and a list \texttt{vocab}, and returns a  sentence of length
+\texttt{n}. Each word in the sentence  should be generated independently from
+the uniform distribution over vocab. For example, if \texttt{n} is \texttt{4}
+and  \texttt{vocab} is \texttt{'(the a every)}, a possible return  value for
+this function is \texttt{'(a the the a)}.
+
+Note that this is a bag of words model, as defined in class. That is, we assume
+every element of the list is generated independently. We will call this the
+uniform bag of words model.
+
+\paragraph{Answer 4:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 5:}
+
+Define a function \required{\texttt{compute-uniform-BOW-prob}},  which takes two
+arguments, \texttt{vocab} and \texttt{sentence}.  \texttt{vocab} is the list of
+all words in the vocabulary, and \texttt{sentence} is a list of observed words.
+The function should return the probability of the sentence  according to the
+uniform bag of words model.
+
+For example, if \texttt{vocab} is \texttt{'(the a every)}, and sentence is
+\texttt{'(every every)}, then the function should return the number
+$\frac{1}{9}$.
+
+\paragraph{Answer 5:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 6:}
+
+Using \texttt{sample-uniform-BOW-sentence} and \texttt{moby-vocab}, sample a
+3-word sentence from the vocabulary of our Moby Dick corpus. This will be a
+sample from the uniform bag of words model for this vocabulary. Repeat this
+process a handful of times. For each of these 3-word sentences, use
+\texttt{compute-uniform-BOW-prob} to compute the probability of the sentence
+according to the uniform bag of words model. Are the different sentences you
+sampled assigned different probabilities under this model? Explain why this is
+(or isn't) to be expected.
+
+\paragraph{Answer 6:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    %% YOUR ANSWER HERE. %%
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    After running (def mob-sentence1 (sample-uniform-BOW-sentence 3 moby-vocab) ) once, we got the sentence '(way myself high). After computing its probability with (compute-uniform-BOW-prob moby-vocab mob-sentence1), we get a value of 3.6443148688046643e-7, which is equal to $1/2744000$. After computing the probabilities of other sentences such as '(throws such all) and '(long shore With), we get the exact same probability as the first sentence. This is to be expected since the words are distributed as a uniform distribution, meaning that every word has the exact same chance at being picked to form a sentence. Therefore, it is normal that we get the same probabilities for all 3-word sentences since every word has the same likelihood of being picked to form a sentence. To further confirm our answer, if we do (count moby-vocab), we get the value 140, so every word has a (1/140) chance to be picked. Then, if we do 1/140 to the power of 3, we get $1/2744000$, further proving that the probabilities calculated are the right ones and will all be identical.
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 7:}
+
+In class we looked at a more general version of the bag of words
+model, in which different words in the vocabulary can be assigned
+different probabilities. We defined a function \texttt{sample-BOW-sentence},
+which returns a sentence sampled from the bag of words model that we
+have specified. Below we have included a slight variant of the
+function which we defined in class. Previously the variables
+vocabulary and probabilities were defined outside of the function. In
+the current version, they are passed in as arguments. The function is
+identical otherwise.
+
+\begin{lstlisting}
+(defn sample-BOW-sentence [len vocabulary probabilities]
+  (if (= len 0)
+    '()
+    (cons (sample-categorical vocabulary probabilities)
+	  (sample-BOW-sentence (- len 1) vocabulary probabilities))))
+\end{lstlisting}
+
+The function \texttt{sample-BOW-sentence} allows us to sample a
+sentence given arbitrary probabilities for the words in our
+vocabulary. Let's make use of this power and define a distribution
+over the vocabulary which is better than the uniform distribution. We
+will use the word frequencies for our Moby Dick corpus to
+\emph{estimate} a better distribution.
+
+Above we defined the variable \texttt{moby-word-frequencies}, which
+contains the frequency of every word that occurs in our Moby Dick
+corpus. Using \texttt{normalize} and \texttt{moby-word-frequencies},
+define a variable \required{\texttt{moby-word-probabilities}}. This variable
+should contain probabilities for every word in \texttt{moby-vocab}, in
+proportion to its frequency in the text. A word which occurs 2 times
+should receive twice as much probability as a word which occurs 1
+time.
+
+\paragraph{Answer 7:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 8:}
+
+Using \texttt{sample-BOW-sentence}, sample a 3-word sentence from a
+bag of words model, in which the probabilities are set to be those in
+\texttt{moby-word-probabilities}. Repeat this process at least three
+times, and write down the sentences that you collect through this
+process.
+
+\paragraph{Answer 8:} Please put the output sentences in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    %% YOUR ANSWER HERE. %%
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+After running (sample-BOW-sentence 3 moby-vocab moby-word-probabilities) 5 times, we get the following sentences:
+
+'(it nearly meet)
+
+'(that time of)
+
+'(find as I)
+
+'(is part soul)
+
+'(it the .)
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 9:}
+
+Define a function \required{\texttt{lookup-probability}}, which takes three
+arguments, \texttt{w}, \texttt{outcomes}, and
+\texttt{probs}. \texttt{probs} represents a probability distribution
+over the elements of \texttt{outcomes}. For example, if outcomes is
+\texttt{'(the a every)}, then \texttt{probs} may be
+\texttt{'(0.2 0.5 0.3)}. The first number in \texttt{probs} is the
+probability of the first element of outcomes, the second number in
+probs is the probability of the second element of outcomes, and so on.
+
+\texttt{lookup-probability} should look up the probability of the
+element \texttt{w}. For example, if \texttt{w} is \texttt{'the},
+then look-up probability should return \texttt{0.2}. If \texttt{w}
+is \texttt{'a}, then \texttt{lookup-probability} should return
+\texttt{0.5}.  If \texttt{w} is not in the list of outcomes,
+the function should return that its probability is zero.
+
+\paragraph{Answer 9:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 10:}
+
+Using \texttt{lookup-probability}, define a
+function \required{\texttt{compute-BOW-prob}} which takes three arguments,
+\texttt{sentence}, \texttt{vocabulary}, and
+\texttt{probabilities}. The arguments \texttt{vocabulary} and
+\texttt{probabilities} are used to define a bag of words model with
+the associated probability distribution over vocabulary words. The
+function should compute the probability of the sentence (which is a
+list of words) according to the bag of words model.
+
+This function is a generalization of the function
+\texttt{compute-uniform-BOW-prob} that you defined above.
+
+\paragraph{Answer 10:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\hrulefill %--------------------------------
+
+\paragraph{Problem 11:}
+
+In problem 8, you collected a number of 3-word sentences. These
+sentences were generated from a bag of words model in which the
+probabilities were set to those in \texttt{moby-word-probabilities},
+which reflect the relative frequency of the words in the Moby Dick
+corpus. Use \texttt{compute-BOW-prob} to compute the probability of
+these sentences according to the bag of words model. How does your
+answer differ from problem 6?
+
+Choose one of the 3-word sentences that you have generated. Can you
+construct a different sentence which has the same probability
+according to the bag of words model? When computing the probability of
+a sentence under a bag of words model, what information about the
+sentence suffices to compute this probability?
+
+\paragraph{Answer 11:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    %% YOUR ANSWER HERE. %%
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+The probability for '(it nearly meet) is now 4.381483020274546e-7, the probability for '(that time of) is 8.762966040549092e-7, the probability for '(find as I) is 0.000003943334718247091, the probability for '(is part soul) is 4.381483020274546e-7, and the probability for '(it the .) is 0.000035051864162196364. As we can see, all probability values have changed for each sentence given that the probability values associated to each word has now been weighted based on the amount of times it actually appears in the initial corpus. Moreover, most probabilities are different from one another except for  '(it nearly meet) and '(is part soul).
+
+If we choose the sentence '(it nearly meet), we can definitely compute another sentence with the same probability. For example, another randomly generated sentence like '(is part soul) has the exact same probability as well. Furthermore, if we just mix and match the three words in '(it nearly meet) to something like '(meet nearly it), we will also get a sentence that has the same probability as '(it nearly meet) since both sentences are constructed with the same words.
+
+The information that is needed to compute a probability of a sentence is the probability of each individual word in the sentence. We then can do the product of all words in a given sentence to compute the sentence's designated probability.
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\end{document}

@@ -1,0 +1,341 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array, parskip}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{url}
+% use straight quotes in texttt environment, make 0 different from O
+\usepackage[zerostyle=b,straightquotes,scaled=.93]{newtxtt}
+
+\usepackage{listings}
+\lstset{
+ basicstyle=\ttfamily,
+ columns=fullflexible,
+ upquote,
+ keepspaces,
+ literate={*}{{\char42}}1
+ {-}{{\char45}}1
+}
+\usepackage[short labels]{enumitem}
+
+\usepackage{soul}  % for strike through (\st{})
+\usepackage[dvipsnames,usenames,table]{xcolor} % for colors
+% \usepackage[htt]{hyphenat} % to break lines in texttt
+
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{mdframed}
+\global\mdfdefinestyle{simple}{linewidth=1pt,skipabove=.5em}
+\newenvironment{AnswerBox}{\begin{mdframed}[style=simple]}{\end{mdframed}}
+\newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}}}
+\usepackage[colorlinks]{hyperref} % \href{http://link.com}{link text}
+\hypersetup{linkcolor=NavyBlue,citecolor=NavyBlue,filecolor=NavyBlue,urlcolor=NavyBlue}
+\usepackage{dsfont}
+\newcommand{\required}[1]{{\color{blue}{#1}}}
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand{\PSnum}{1}
+
+\author{
+  \textbf{Name}: Mathieu-Joseph Magri       %Put your name here.
+, \textbf{McGill ID}: 260928498  %Put your McGill ID here.
+}
+
+\begin{document}
+
+\title{LING/COMP 445, LING 645\\Problem Set \PSnum} \date{Due before 8:35 AM on
+Thursday, January 19, 2023} \maketitle Please enter your name and McGill ID
+above. There are several types of questions below.
+\begin{itemize}
+  \item For questions involving answers in English or mathematics or a
+    combination of the two, put your answers to the question in the answer box
+    provided, like in the example below.
+
+    This .pdf document you are reading was compiled from a .tex document with
+    \LaTeX. You must use \LaTeX{} for this problem set, and future problem sets
+    in this course.\footnote{To compile a file \texttt{file.tex} to
+      \texttt{file.pdf}, you can install \LaTeX{}, and use the command
+      \texttt{pdflatex file.tex} at the command line, or make use of an online
+      service such as \url{https://overleaf.com}. You can find more information
+    about \LaTeX{} here \url{https://www.latex-project.org/}.}
+
+  \item For programming questions, please put your answers into a file called
+    \texttt{ps\PSnum-lastname-firstname.clj}. Be careful to follow the
+    instructions exactly and be sure that all of your function definitions use
+    the precise names, number of inputs and input types, and output types as
+    requested in each question.
+
+    For the code portion of the assignment, \textbf{it is crucial to submit a
+    standalone file that runs}. Before you submit
+    \texttt{ps\PSnum-lastname-firstname.clj}, make sure that your code executes
+    correctly without any errors when run at the command line by typing
+    \texttt{clojure ps\PSnum-lastname-firtname.clj} at a terminal prompt. We
+    cannot grade any code that does not run correctly as a standalone file, and
+    if the preceding command produces an error, the code portion of the
+    assignment will receive a $0$.
+
+    To do the computational problems, we recommend that you install Clojure on
+    your local machine and write and debug the answers to each problem in a
+    local copy of \texttt{ps\PSnum-lastname-firstname.clj}. You can find
+    information about installing and using Clojure here
+    \url{https://clojure.org/}.
+\end{itemize}
+
+Once you have entered your answers, please compile your copy of this \LaTeX{}
+file into a PDF and submit
+\begin{enumerate}[(i),noitemsep]
+  \item the compiled PDF renamed to \texttt{ps\PSnum-lastname-firstname.pdf}
+  \item the raw \LaTeX{} file renamed to
+    \texttt{ps\PSnum-lastname-firstname.tex} and
+  \item your \texttt{ps\PSnum-lastname-firstname.clj}
+\end{enumerate}
+to the Problem Set \PSnum{} folder under `Assignments' on MyCourses.
+
+
+
+
+\noindent\hrulefill%-------------Example-Problem----
+
+\paragraph{Example Problem:} This is an example question using some fake math
+like this $L=\sum_0^{\infty} \mathcal{G} \delta_x$.
+
+\textbf{Note:} If you're new to \LaTeX{}, find the code corresponding to this
+text in the .tex document to see an example of using \LaTeX{} to typeset math
+(you'll need this for later problem sets).
+
+
+\paragraph{Example Answer:} Put your answer in the box provided, like this:
+\begin{AnswerBox}
+  Example answer is $L=\sum_0^{\infty} \mathcal{G} \delta_x$.
+\end{AnswerBox}
+
+
+\clearpage\pagebreak
+
+\noindent\hrulefill%--------------------------------
+
+
+\paragraph{Problem 1:}
+Write an expression which defines a variable \required{\texttt{year}} with the
+integer value \texttt{2023}.
+
+\paragraph{Answer 1:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 2:} Consider the following:
+\begin{lstlisting}
+  (= 4 (+ 1 2))
+\end{lstlisting}
+This is:
+\begin{enumerate}[nosep, label=\Alph*.]
+  \item an expression
+  \item a list
+  \item both
+  \item neither
+\end{enumerate}
+
+\paragraph{Answer 2:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+    
+    %%%%%%%%%%%%%%%%%%%%%%%
+    %% Your answer (A, B, C, or D) here. You can delete this comment.
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    C
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\hrulefill%--------------------------------
+
+\paragraph{Problem 3:} Which of the following evaluates to a value (A, B, both,
+or neither)?
+
+\begin{enumerate}[nosep, label=\Alph*.]
+  \item \texttt{'(2 2 2)}
+  \item \texttt{(2 2 2)}
+\end{enumerate}
+
+\paragraph{Answer 3:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% Your answer (A, B, both, or neither) here. You can delete this comment.
+  %%%%%%%%%%%%%%%%%%%%%%%
+
+  A
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\hrulefill%--------------------------------
+
+\paragraph{Problem 4:} Consider the following expression:
+\begin{lstlisting}
+  (= "4" (+ 1 3))
+\end{lstlisting}
+
+This expression contains:
+\begin{enumerate}[nosep, label=\Alph*.]
+  \item a string
+  \item quoted material
+  \item both
+  \item neither
+\end{enumerate}
+
+\paragraph{Answer 4:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% Your answer (A, B, C, or D) here. You can delete this comment.
+  %%%%%%%%%%%%%%%%%%%%%%%
+
+  A
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\hrulefill%--------------------------------
+
+\paragraph{Problem 5:} Write a function \required{\texttt{add-up}} that takes
+two numbers returns their sum.
+
+\paragraph{Answer 5:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 6:} Write a function \required{\texttt{is-it-four?}} that
+returns \texttt{true} when given the number \texttt{4}, and returns
+\texttt{false} otherwise.
+
+\textbf{Note}: Don't forget the question mark in the function name! This is a
+convention in Clojure\footnote{See
+\url{https://guide.clojure.style/\#naming-predicates}.} for the names of
+predicate functions (functions that return a boolean value---\texttt{true} or
+\texttt{false}). Also, an incorrectly named function won't be seen by the grader
+script, so even if your function behaves correctly, you won't get credit if it
+has the wrong name!
+
+\paragraph{Answer 6:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 7:} Fill in the blank, so the following expression evaluates
+to \texttt{true}:
+\begin{lstlisting}
+  (= (quote ___) 'platypus)
+\end{lstlisting}
+
+\paragraph{Answer 7:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 8:} Define a function \required{\texttt{func}} and an
+expression \required{\texttt{expr}} such that the following evaluates to
+\texttt{true}.
+\begin{lstlisting}
+  (= 3 (apply func expr))
+\end{lstlisting}
+
+\paragraph{Hint:} be sure you understand what kinds of arguments \texttt{apply}
+expects.
+
+\paragraph{Answer 8:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 9:} The built-in function \texttt{type} is useful for
+checking what kind of object an expression evaluates to.\footnote{Though note
+  that the types are different in Clojure (in the command line) versus
+  ClojureScript (in the textbook).  For instance, they disagree about whether
+  integer numbers (like $4$) and  floating point numbers (like $4.0$) are
+  different types. \textbf{For the purposes of this problem set, don't worry
+about this}.} Write a function \required{\texttt{both-same-type?}} that takes
+two arguments, and returns \texttt{true} when they both have the same type,
+and \texttt{false} otherwise.
+
+\paragraph{Answer 9:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 10:} Write a function \required{\texttt{list-longer-than?}}
+which takes two arguments: an integer \texttt{n}, and a list \texttt{lst} and
+returns \texttt{true} if \texttt{lst} has more than \texttt{n} elements, and
+\texttt{false} otherwise. For example, \texttt{(list-longer-than? 3 '(1 2 3))}
+should return false, and \texttt{(list-longer-than? 2 '(1 2 3))} should return
+true.
+
+\paragraph*{Hint:} you may find built-in clojure function \texttt{count} useful.
+
+\paragraph{Answer 10:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 11:} In linear algebra, if $\mathbf x, \mathbf y$ are two
+vectors each with $n$ components, their dot product is $\mathbf x\cdot \mathbf y
+= \sum_{i=1}^n x_i y_i$. Write a function \required{\texttt{dot-product}} that
+takes two lists of numbers as arguments, and returns the dot product. So for
+example, if the list \texttt{x} is \texttt{'(0 2 4)} and the list \texttt{y} is
+\texttt{'(1 3 5)}, the expression \texttt{(dot-product x y)} should return
+\texttt{26}, because $0\cdot1 + 2\cdot3 + 4\cdot5 = 26$.
+
+You may assume that the two input lists are of equal length and contain only
+numbers as elements.
+
+\paragraph*{Hint:} you may find built-in clojure functions \texttt{apply} and
+\texttt{map} useful.
+
+\paragraph{Answer 11:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 12:} In Clojure (like other functional programming languages)
+functions and variables are treated identically. This means a function may
+easily take another function as an argument, and/or return a
+function.\footnote{Functions which take functions as arguments or return
+  functions are called `higher order functions'. Built-in functions \texttt{map}
+and \texttt{apply} are higher order functions.} Write a function
+\required{\texttt{swap-arg-order}} which takes a \emph{function} (of two
+arguments) as an argument returns \emph{another function} that does the same
+thing, but expects its two arguments in the opposite order.
+
+That is, for example
+\begin{itemize}[nosep]
+  \item given the division function \texttt{/} which divides the first argument
+    by the second (so \texttt{(/ 3 6)} returns the number \texttt{1/2}), the
+    following expression should evaluate to \texttt{2}
+    \begin{lstlisting}
+  ((swap-arg-order /) 3 6)
+    \end{lstlisting}
+  \item given the function \texttt{list-longer-than?} from above, the following
+    expression should evaluate to \texttt{true}
+    \begin{lstlisting}
+  ((swap-arg-order list-longer-than?) '(1 2 3) 2)
+    \end{lstlisting}
+\end{itemize}
+
+\paragraph{Answer 12:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\paragraph{Problem 13:} Define a higher order function \required{\texttt{g}} so
+the following expression evaluates to \texttt{true}:
+\begin{lstlisting}
+  (= 100 (g (fn [n] (* n n))))
+\end{lstlisting}
+
+\paragraph{Answer 13:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill%--------------------------------
+
+\end{document}

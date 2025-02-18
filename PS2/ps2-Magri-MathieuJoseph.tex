@@ -1,0 +1,481 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb, graphicx, multicol, array, parskip}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{url}
+% use straight quotes in texttt environment, make 0 different from O
+\usepackage[zerostyle=b,straightquotes,scaled=.93]{newtxtt}
+
+\usepackage{listings}
+\lstset{
+ basicstyle=\ttfamily,
+ columns=fullflexible,
+ upquote,
+ keepspaces,
+ literate={*}{{\char42}}1
+ {-}{{\char45}}1
+}
+\usepackage[short labels]{enumitem}
+
+\usepackage{soul}  % for strike through (\st{})
+\usepackage[dvipsnames,usenames,table]{xcolor} % for colors
+% \usepackage[htt]{hyphenat} % to break lines in texttt
+
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{mdframed}
+\global\mdfdefinestyle{simple}{linewidth=1pt,skipabove=.5em}
+\newenvironment{AnswerBox}{\begin{mdframed}[style=simple]}{\end{mdframed}}
+\newcommand\defeq{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny\sffamily def}}}{=}}}
+\usepackage[colorlinks]{hyperref} % \href{http://link.com}{link text}
+\hypersetup{linkcolor=NavyBlue,citecolor=NavyBlue,filecolor=NavyBlue,urlcolor=NavyBlue}
+\usepackage{dsfont}
+\newcommand{\required}[1]{{\color{blue}{#1}}}
+\newcommand{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+\newcommand{\PSnum}{2}
+
+\author{
+  \textbf{Name}: Mathieu-Joseph Magri      %Put your name here.
+, \textbf{McGill ID}: 260928498 %Put your McGill ID here.
+}
+
+\begin{document}
+
+\title{LING/COMP 445, LING 645\\Problem Set \PSnum}
+\date{Due before 8:35 AM on Thursday, February 2, 2023}
+\maketitle
+
+Please enter your name and McGill ID above. There are several types of questions
+below.
+
+\begin{itemize}
+  \item For questions involving answers in English or mathematics or a
+    combination of the two, put your answers to the question in an answer box
+    like in the example below.
+  \item For programming questions, please put your answers into a file called
+    \texttt{ps\PSnum-lastname-firstname.clj}. Be careful to follow the
+    instructions exactly and be sure that all of your function definitions use
+    the precise names, number of inputs and input types, and output types as
+    requested in each question.
+
+    For the code portion of the assignment, \textbf{it is crucial to submit a
+    standalone file that runs}. Before you submit
+    \texttt{ps\PSnum-lastname-firstname.clj},  make sure that your code executes
+    correctly without any errors  when run at the command line by typing
+    \texttt{clojure ps\PSnum-lastname-firtname.clj} at a terminal prompt. We
+    cannot grade any code that does not run correctly as a standalone file, and
+    if the preceding command produces an error, the code portion of the
+    assignment will receive a $0$.
+
+    To do the computational problems, we recommend that you install Clojure on
+    your local machine and write and debug the answers to each problem in a
+    local copy of \texttt{ps\PSnum-lastname-firstname.clj}. You can find
+    information about installing and using Clojure here
+    \url{https://clojure.org/}.
+
+    {\color{red}{Note} there is a built-in function called \texttt{reverse}.
+      \textbf{Do not use the built-in function \texttt{reverse} in this problem
+      set!} We remove \texttt{reverse} from the namespace when  we grade, so
+    using it anywhere will lead to an error and a result in a $0$.}
+\end{itemize}
+
+Once you have entered your answers, please compile your copy of this \LaTeX{}
+file\footnote{To compile a file \texttt{file.tex} to \texttt{file.pdf}, you can
+  use the command \texttt{pdflatex file.tex} at the command line, or make use of
+  an online service such as \url{https://overleaf.com}. You can find more
+information about \LaTeX{} here \url{https://www.latex-project.org/}.} into a
+PDF and submit
+\begin{enumerate}[(i),noitemsep]
+  \item the compiled PDF renamed to \texttt{ps\PSnum-lastname-firstname.pdf}
+  \item the raw \LaTeX{} file renamed to
+    \texttt{ps\PSnum-lastname-firstname.tex} and
+  \item your \texttt{ps\PSnum-lastname-firstname.clj}
+\end{enumerate}
+to the Problem Set \PSnum{} folder under `Assignments' on MyCourses.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Example Problem:} This is an example question using some fake math
+like this $L=\sum_0^{\infty} \mathcal{G} \delta_x$.
+
+\paragraph{Example Answer:} Put your answer in the box provided, like this:
+\begin{AnswerBox}
+  Example answer is $L=\sum_0^{\infty} \mathcal{G} \delta_x$.
+\end{AnswerBox}
+
+
+\pagebreak%-------------------------------------------
+
+\paragraph{Problem 1:}
+Write a single-argument function called \required{\texttt{absval}} that, when
+passed a number,  computes its absolute value.  It should do this by finding the
+square root of the square of the argument.  (Note: you should use the
+\texttt{Math/sqrt} function built in to Clojure (from Java), which returns the
+square root of a number.)
+
+\paragraph{Answer 1:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 2:} In both of the following definitions, there are one or
+more errors of some kind. In each case, explain what's wrong and why, and fix
+it:
+
+\begin{lstlisting}
+  (defn take-square
+    (* x x))
+\end{lstlisting}
+
+\begin{lstlisting}
+  (defn sum-of-squares [(take-square x) (take-square y)]
+    (+ (take-square x) (take-square y)))
+\end{lstlisting}
+
+\paragraph{Answer 2:} Please put the fixed functions in
+\texttt{ps\PSnum-lastname-firstname.clj} and \textbf{describe what is wrong and
+why in the box below}.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+For "take-square", when using "defn" instead of "fn", we must still define our inputs using "[]". In the original function, we do not not initialize the inputs and therefore the function is not declared properly. By adding "[x]", the function is fixed and works as intended.
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% YOUR ANSWER HERE. %% (you may delete this comment)
+  %%%%%%%%%%%%%%%%%%%%%%%
+
+  
+For "sum-of-squares", when using the original function, we get a "Unsupported binding form" error at line [(take-square x) (take-square y)]. We instead should just simply pass x and y by doing [x y]. By doing so, the function is fixed and works as intended, by suming the squares of both input numbers.
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 3:}
+The expression \texttt{(+ 11 2)}  evaluates to \texttt{13}. Write four
+other different Clojure expressions which also evaluate to the number
+\texttt{13} (either the integer \texttt{13} or the float \texttt{13.0}). Using
+\texttt{def}, assign these expressions to the symbols
+\required{\texttt{exp-13-1}},
+\required{\texttt{exp-13-2}},
+\required{\texttt{exp-13-3}}, and
+\required{\texttt{exp-13-4}}.
+
+In each def statement, be sure to quote the expression (as below for our
+example), so it is not evaluated before being assigned to the symbol.
+
+\begin{lstlisting}
+  (def exp-13-0 '(+ 11 2))
+\end{lstlisting}
+
+\paragraph{Answer 3:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 4:}
+Define a function called \required{\texttt{third}}, that selects the third
+element of a list. For example, given the list \texttt{'(4 5 6)} as its
+argument, \texttt{third} should return the number \texttt{6}.
+
+\paragraph{Answer 4:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 5:} Define a function called \required{\texttt{compose}},
+that takes two one-place functions \texttt{f} and \texttt{g} as arguments. It
+should return a new function, the composition of its input functions, which
+computes \texttt{f} of \texttt{g} of \texttt{x} when passed the argument
+\texttt{x}. For example, the function \texttt{Math/sqrt} (built in to Clojure
+from Java) takes the square root of a number, and the function \texttt{Math/abs}
+(likewise)  takes the absolute value of a number. If we use \texttt{defn} to
+define functions \texttt{sqrt} and \texttt{abs} as
+\begin{lstlisting}
+  (defn sqrt [x] (Math/sqrt x))
+  (defn abs [x] (Math/abs x))
+\end{lstlisting}
+then \texttt{((compose sqrt abs) -36)} should return \texttt{6}, since the
+square root of the absolute value of \texttt{-36} equals \texttt{6}.
+
+\paragraph{Answer 5:} Please put your answer in \texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 6:}
+Define a function called \required{\texttt{first-two}} that takes a list as its
+sole argument, and returns a two-element list containing the first two elements
+of the argument. For example, given the list \texttt{'(4 5 6)},
+\texttt{first-two} should return the list \texttt{'(4 5)}.
+
+You may assume that the list passed in has at least two elements.
+
+\paragraph{Answer 6:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 7:}
+Define a function called \required{\texttt{remove-second}} that takes a list,
+and returns a new list that is the same as the input list, but with  the second
+value removed. For example, given \texttt{'(3 1 4)}, \texttt{remove-second}
+should return the list \texttt{'(3 4)}.
+
+\paragraph{Answer 7:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 8:}
+Define a function called \required{\texttt{add-to-end}} that takes in two
+arguments: a list \texttt{lst} and a value \texttt{x}. It should return a new
+list which is the same as \texttt{lst}, except that it has \texttt{x} appended
+as its final element. For example, \texttt{(add-to-end (list 5 6 4) 0)} should
+return the list \texttt{'(5 6 4 0)}.
+
+\paragraph{Answer 8:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 9:}
+Define a function called \required{\texttt{reverse-list}}, that takes in a list,
+and returns the reverse of the list. For example, if it takes in the list
+\texttt{'(a b c)}, it will output the list \texttt{'(c b a)}.
+
+Do not use the built-in function \texttt{reverse} (in this problem, nor anywhere
+in this problem set).
+
+\paragraph{Answer 9:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 10:}
+Define a function called \required{\texttt{count-to-1}}, that takes a positive
+integer \texttt{n}, and returns a list of the integers counting down from
+\texttt{n} to \texttt{1}. For example, given input \texttt{3}, it will return
+the list \texttt{(list 3 2 1)}.
+
+\paragraph{Answer 10:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 11:}
+Define a function called \required{\texttt{count-to-n}}, that takes a positive
+integer \texttt{n}, and returns a list of the integers from \texttt{1} to
+\texttt{n}. For example, given input \texttt{3}, it will return the value of
+\texttt{(list 1 2 3)}.
+
+\paragraph{Hint:}  Use the procedures \texttt{reverse-list}  and
+\texttt{count-to-1} that you wrote in the previous problems.
+
+\paragraph{Answer 11:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 12:}
+Define a function called \required{\texttt{get-max}}, that takes a list of
+numbers, and returns the maximum value.  So, \texttt{(get-max '(2 3 3))} should
+return \texttt{3}.
+
+Don't use the built-in \texttt{max} function.
+
+\paragraph{Answer 12:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 13:}
+Define a function called \required{\texttt{greater-than-five?}}, that takes a
+list of numbers, and returns a list of equal length to the input list, but where
+each number is replaced with \texttt{true} if the number is greater than
+\texttt{5}, and \texttt{false} otherwise. For example, given input \texttt{(list
+5 4 7)}, it will return the list \texttt{'(false false true)}.
+
+\paragraph{Hint:} Use the built in function \texttt{map}.
+
+\paragraph{Answer 13:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 14:}
+Define a function called \required{\texttt{concat-three}}, that takes three
+sequences (represented as lists), \texttt{x}, \texttt{y}, and \texttt{z}, and
+returns the concatenation of the three sequences. For example, given the
+arguments \texttt{(list 'a 'b)}, \texttt{(list 'b 'c)}, and \texttt{(list 'd
+'e)}, the procedure should return the value of \texttt{(list 'a 'b 'b 'c 'd
+'e)}.
+
+Don't use the built-in \texttt{concat} function.
+
+\paragraph{Answer 14:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 15:}
+Define a function called \required{\texttt{sequence-to-power}}, that takes a
+sequence (represented as a list) \texttt{x}, and a nonnegative integer
+\texttt{n}, and returns the sequence \texttt{x}$^n$. For example, given the
+sequence \texttt{(list 'a 'b)} as the first argument and  the number \texttt{3}
+as the second, the procedure should return the value of \texttt{(list 'a 'b 'a
+'b 'a 'b)}.
+
+You may use the built-in \texttt{concat} function for this problem.
+
+\paragraph{Answer 15:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 16:}
+Define $L$ as a language containing a single sequence, $L=\{a\}$.
+
+In Clojure, we can represent the sequence $a$ as the list \texttt{'(a)}.
+
+Define a function called \required{\texttt{in-L-star?}} that takes a sequence
+(represented as a list), and returns true if and only if the sequence is a
+member of the language $L^*$. For example, given a sequence such as \texttt{'(a
+b)}, the procedure should return \texttt{false}, because $ab$ is not a member of
+$L^*$.
+
+\paragraph{Answer 16:} Please put your answer in
+\texttt{ps\PSnum-lastname-firstname.clj}.
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 17:}
+Let $A$ and $B$ be two distinct formal languages. We'll use $(A\cdot B)$ to
+denote the concatenation of $A$ and $B$, in that order. Find an example of
+languages $A$ and $B$ such that $(A\cdot B)=(B\cdot A)$.
+
+\paragraph{Answer 17:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% YOUR ANSWER HERE. %%
+  %%%%%%%%%%%%%%%%%%%%%%%
+
+  If we define $A$ as the formal language containing the empty string $A = \{\epsilon\}$, and $B = \{a\}$, then $(A\cdot B)=(B\cdot A)$ given that the empty string $\epsilon$ concatenated with any other string gives back the same element, since $\epsilon$ is the identity element of concatenation much like 1 is the identity element of multiplications in mathematics.
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 18:}
+Let $A$ and $B$ be languages. Find an example of languages $A$ and $B$ such that
+$(A\cdot B)$ does not equal $(B\cdot A)$
+
+\paragraph{Answer 18:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% YOUR ANSWER HERE. %%
+  %%%%%%%%%%%%%%%%%%%%%%%
+If we define $A$ as  $A = \{a\}$, and B as $B = \{b\}$, then $(A\cdot B)\neq(B\cdot A)$ given that $(A\cdot B)= \{ab\}$ while $(B\cdot A)= \{ba\}$.
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 19:}
+Find an example of a language $L$ such that $L=L^2$, i.e. $L=(L\cdot L)$.
+
+\paragraph{Answer 19:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% YOUR ANSWER HERE. %%
+  %%%%%%%%%%%%%%%%%%%%%%%
+
+  If $L$ is defined as $L = \{\epsilon\}$, then $L=L^2$, since $L^2 = L\cdot L = \{\epsilon^2\} = \{\epsilon \cdot \epsilon\} = \{\epsilon\}$.
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 20:}
+Argue that the intersection of any two languages $L$ and $L'$ is always
+contained in $L$.
+
+\paragraph{Answer 20:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% YOUR ANSWER HERE. %%
+  %%%%%%%%%%%%%%%%%%%%%%%
+
+  An intersection, by definition, is a set operation that  creates a set of elements between two sets for which all elements in the created intersection set are present in both sets. That is when doing $A \cap B$ for two sets $A$ and $B$, we create a set that contains all elements of $A$ that are also in $B$. Therefore, by definition, $A \cap B$ is a subset of $A$. The same logic can be applied to a language $L$. That is, if we do $L \cap L'$, we get the set that contains all elements of $L$ that are also in $L'$, and thus, by definition, $L \cap L'$ is a subset of $L$ and is therefore contained by $L$.
+
+Example: We have two sets $A = \{1, 2, 3\}$ and $B = \{ 2, 3, 4\}$. $A \cap B = \{2, 3\}$. As we can see, all elements of $A \cap B$ are contained within the set $A$.
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 21:}
+Let $L_1$, $L_2$, $L_3$, and $L_4$ be languages. Argue that the union of
+Cartesian products $(L_1 \times L_3) \cup (L_2 \times L_4)$ is always contained
+in the Cartesian product of unions $(L_1 \cup L_2) \times (L_3 \cup L_4)$.
+
+\paragraph{Answer 21:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% YOUR ANSWER HERE. %%
+  %%%%%%%%%%%%%%%%%%%%%%%
+
+  When doing the union of languages $L_1$ and $L_2$, we effectively combine all elements in both sets in to one set. The same can be said for when we do the union of languages $L_3$ and $L_4$. Hence, when doing the Cartesian product $(L_1 \cup L_2) \times (L_3 \cup L_4)$, we effectively go through all elements in the set $L_1$ and create pairs with all elements in both $L_3$ and $L_4$, and we do the same with $L_2$, meaning we go through all elements in $L_2$ and create pairs with all elements in both $L_3$ and $L_4$. In other words, $(L_1 \cup L_2) \times (L_3 \cup L_4)$ is equivalent to $(L_1 \times L_3) \cup (L_1 \times L_4) \cup (L_2 \times L_3) \cup (L_2 \times L_4) $. Therefore, we can clearly see that $(L_1 \times L_3) \cup (L_2 \times L_4)$ is contained in $(L_1 \cup L_2) \times (L_3 \cup L_4)$, given that $(L_1 \times L_3) \cup (L_2 \times L_4)$ is the set that contains all possible pairs between the sets $L_1$ and $L_3$ and all possible pairs between the sets $L_2$ and $L_4$.
+
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 22:}
+Let $L$ and $L'$ be finite languages. Show that the number of elements in the
+Cartesian product $L \times L'$ is always equal to the number of elements in $L'
+\times L$.
+
+\paragraph{Answer 22:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% YOUR ANSWER HERE. %%
+  %%%%%%%%%%%%%%%%%%%%%%%
+When doing a cartesian product between two sets, every element of one set is associated to one element of the other set. These associations are done for every single element in each set. Therefore, if the set $L_1$ has a cardinality of 5 and the set $L_2$ has a cardinality of 3, $L_1 \times L_2$ will have a cardinality of 15 given that all 5 elements of $L_1$ will have made 3 pairs each given that $L_2$ has a total of 3 elements. When doing $L_2 \times L_1$, although we don't get the same elements as when doing $L_1 \times L_2$ given that order of operations has an influence on the resulting set when doing a Cartesian product, the cardinality of $L_2 \times L_1$ will be equal to the cardinality of $L_1 \times L_2$, since all three elements of $L_2$ will have made 5 pairs each with the 5 elements of $L_1$. Therefore, for two sets $L$ and $L'$, $|L \times L'| = |L' \times L|$.
+
+Note: The cardinality of a Cartesian product is simply the product of the cardinalities of each individual set. Therefore, from the above explanation, $|L_1 \times L_2| = |L_1| \cdot |L_2|$. ($"\cdot"$ here symbolizes the regular, mathematical multiplication operator)
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\noindent\hrulefill %--------------------------------
+
+\paragraph{Problem 23:}
+
+Suppose $L$ is a language, and that concatenation of $L$ with itself is equal to
+itself: $(L\cdot L) = L$. Show that $L$ is either the empty set,  the set
+$\{\epsilon\}$, or an infinite language.
+
+\paragraph{Answer 23:} Please put your answer in the box below.
+
+\begin{AnswerBox}%% Do not delete %%%%%%%
+
+  %%%%%%%%%%%%%%%%%%%%%%%
+  %% YOUR ANSWER HERE. %%
+  %%%%%%%%%%%%%%%%%%%%%%%
+We have three situations. 
+
+If $L = \varnothing$, then we know that the empty set concatenated with itself (and concatenated to all elements for that matter) returns the empty set, thus itself. Therefore, $L \cdot L = \varnothing^2 = \varnothing = L$
+
+If $L = \{\epsilon \}$, that is the set containing the empty string, we know that the empty string concatenated to any element including itself returns the element that it was concatenated with. Therefore, $L \cdot L = \{\epsilon^2 \} = \{\epsilon\} = L$
+
+Finally, if we take an infinite set such as $L = V^*$, the Kleene star set on V, then we know that $L \cdot L = (V^* \cdot V^*) = V^* = L$, given that when multiplying two infinite things together, we always end up with an infinity of things.
+\end{AnswerBox}%% Do not delete %%%%%%%
+
+\end{document}
